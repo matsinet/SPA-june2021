@@ -1,13 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 const greetings = require("./routers/greetings");
+const pizzas = require("./routers/pizzas");
+
+dotenv.config();
 
 // Import ^^^^^
 // Instansiation
 const app = express();
 
-mongoose.connect("mongodb://localhost/pizzeria");
+mongoose.connect(process.env.MONGODB);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Connection error:'));
@@ -25,6 +29,7 @@ app.use(express.json());
 app.use(logging);
 
 app.use(greetings);
+app.use(pizzas);
 
 // Configuring Express instance
 app.get("/status", (request, response) => {
