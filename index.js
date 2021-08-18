@@ -9,7 +9,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const router = new Navigo(window.location.origin);
-console.log('matsinet-process.env:', process.env);
 
 function render(st = state.Home) {
   document.querySelector("#root").innerHTML = `
@@ -65,6 +64,18 @@ router.hooks({
     const page = params && params.hasOwnProperty("page") ? capitalize(params.page) : "Home";
 
     switch (page) {
+      case "Pizza":
+        axios
+          .get(`${process.env.API}/pizzas`)
+          .then(response => {
+            state[page].pizzas = response.data;
+            done();
+          })
+          .catch(error => {
+            console.log("I died trying to get Pizza", error);
+            done();
+          });
+        break;
       case "Blog":
         state.Blog.posts = [];
         axios
