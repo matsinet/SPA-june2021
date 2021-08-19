@@ -57,6 +57,40 @@ function addEventListeners(st) {
       render(state.Gallery);
     });
   }
+
+  console.log("st.view", st.view);
+  if (st.view === "Order") {
+    document.querySelector("form").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const inputList = event.target.elements;
+
+      const toppings = [];
+      for (let input of inputList.toppings) {
+        if (input.checked) {
+          toppings.push(input.value);
+        }
+      }
+
+      const requestData = {
+        crust: inputList.crust.value,
+        cheese: inputList.cheese.value,
+        sauce: inputList.sauce.value,
+        toppings: toppings
+      };
+      console.log("request Body", requestData);
+
+      axios
+      .post(`${process.env.API}/pizzas`, requestData)
+      .then(response => {
+        state.Pizza.pizzas.push(response.data);
+        router.navigate("/Pizza");
+      })
+      .catch(error => {
+        console.log("It puked", error);
+      });
+    });
+  }
 }
 
 router.hooks({
