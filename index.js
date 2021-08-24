@@ -123,7 +123,6 @@ router.hooks({
           })
           .catch((err) => console.log(err));
         break;
-
       case "Home":
         axios
           .get(
