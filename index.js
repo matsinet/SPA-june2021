@@ -128,7 +128,8 @@ router.hooks({
           .get(
             `https://api.openweathermap.org/data/2.5/weather?appid=${process.env.WEATHER_API_KEY}&q=st.%20louis`
           )
-          .then((response) => {
+          .then(response => {
+            console.log('weather', response);
             state.Home.weather = {};
             state.Home.weather.city = response.data.name;
             state.Home.weather.temp = response.data.main.temp;
