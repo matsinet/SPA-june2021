@@ -19,5 +19,5 @@ export default (st) => html`
     ${st.weather.humidity}%, and the weather is ... ${st.weather.description}
   </h3>
 
-  <img id="shark" class="cover-img" src="${sharksImage}" />
+  <!-- <img id="shark" class="cover-img" src="${sharksImage}" /> -->
 `;
