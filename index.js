@@ -20,10 +20,10 @@ function render(st = state.Home) {
 
   router.updatePageLinks();
 
-  addEventListeners(st);
+  afterDomRender(st);
 }
 
-function addEventListeners(st) {
+function afterDomRender(st) {
   // add event listeners to Nav items for navigation
   document.querySelectorAll("nav a").forEach((navLink) =>
     navLink.addEventListener("click", (event) => {
@@ -119,7 +119,6 @@ router.hooks({
               state.Blog.posts.push(post);
             });
             done();
-            // console.log(state.Blog.posts);
           })
           .catch((err) => console.log(err));
         break;
@@ -129,22 +128,29 @@ router.hooks({
             `https://api.openweathermap.org/data/2.5/weather?appid=${process.env.WEATHER_API_KEY}&q=st.%20louis`
           )
           .then(response => {
-            console.log('weather', response);
-            state.Home.weather = {};
-            state.Home.weather.city = response.data.name;
-            state.Home.weather.temp = response.data.main.temp;
-            state.Home.weather.feelsLike = response.data.main.feels_like;
-            state.Home.weather.humidity = response.data.main.humidity;
-            state.Home.weather.description = response.data.weather[0]["description"];
+            const data = response.data;
+            state.Home.weather = {
+              city: data.name,
+              temp: data.main.temp,
+              feelsLike: data.main.feels_like,
+              humidity: data.main.humidity,
+              description: data.weather[0].description
+            };
             done();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
         break;
 
       default:
         done();
     }
   },
+  after: (params) => {
+    console.log("Firing the router after hook");
+  }
 });
 
 router
